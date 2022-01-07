@@ -109,7 +109,7 @@ jobs:
           --function-name brunoneves-test-lambda \
           --s3-bucket brunoneves-test-bucket \
           --s3-key ${{ github.sha }}.zip \
-          -- publish
+          --publish
 
 
 
