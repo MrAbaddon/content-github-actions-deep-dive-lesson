@@ -93,3 +93,24 @@ jobs:
         run: aws s3 cp ${{github.sha}}.zip s3://brunoneves-test-bucket/${{github.sha}}.zip
 
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: upload
+    steps:
+      - name: configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+      - name: Update function code
+        run: |
+          aws lambda update-function-code \
+          --function-name brunoneves-test-lambda \
+          --s3-bucket brunoneves-test-bucket \
+          --s3-key ${{ github.sha }}.zip \
+          -- publish
+
+
+
+
